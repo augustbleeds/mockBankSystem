@@ -1,0 +1,14 @@
+Testplan.txt by Augustus Chang 
+
+
+The bank-testcases.txt was created to be executed sequentially, in order. So that will take you from creating an account, to closing it, and all of the errors and confirmation messages in between. 
+
+If you are using different machines for the server, please make sure that the server machine is not masked by the network. Any machine connecting over Rutgers University Wireless will be masked. There is an exception to this, which are the ilab machines. So you can create a server over the ilab machines. For our examples, we just used localhost in the command line argument.
+
+An arbitrary port was chosen for the server to bind to.
+
+Note that the input commands are throttled to simulate the time it would actually take (as the assignment requested). ~Promise it is not actually slow!
+
+
+Thanks!
+			

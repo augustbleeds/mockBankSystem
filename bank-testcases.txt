@@ -1,0 +1,203 @@
+Written by Augustus Chang 
+
+Important Notes: 
+
+a. text inside of parenthesis () are things that are not explicit commands but directions.
+
+b. The testcases walk you through, step by step, the test cases of one client. They also work concurrently! But as it is hard to explain and keep track of multiple clients (1,2,etc..) accessing and being refused service from the server so we refrained from doing so. But please do try multiple clients
+
+c. If you send a SIGINT signal (ctrl-c) and kill the client, a signal handler appropriately handles this case so the client will automatically send an exit command to the server, so the account’s lock will be released for further use.
+
+d. If the client seems slow, it is because commands are throttled to simulate the time it would actually take (as the assignment requested). We promise its not because its actually slow! The client sleeps for 2 seconds to simulate many clients accessing it simultaneously.
+
+Thanks!
+
+Testcases:
+
+
+1. 	Input: (start clients with no server) ./client 127.0.0.1 (or ‘localhost’ or ‘kill.cs.rutgers.edu’ or any unblocked machine)
+   
+	Output on client side: 
+			Could not find server. Attempting to reconnect in 3 sec. . .
+			Could not find server. Attempting to reconnect in 3 sec. . .
+			Could not find server. Attempting to reconnect in 3 sec. . .
+			(etc.) 
+
+2.  	Input: (start the server) ./server
+
+	Output on client side:
+			- - - Welcome to the Virtual Bank! - - -
+			COMMANDS:
+				open
+				start
+				credit
+				debit
+				balance
+				finish
+				exit
+
+	Output on server side: 	
+			BANK INFORMATION:
+				No Account have been opened yet
+			Server has just accepted a client connection
+			BANK INFORMATION:
+				No Account have been opened yet
+			(etc.)
+			
+
+3. 	Input: (type a non-existent command into client) e.g jump
+
+	Output on client side:
+			ERROR: Invalid argument: jump
+			COMMANDS:
+				open
+				start
+				credit
+				debit
+				balance
+				finish
+				exit
+
+4. 	Input: (try to start session on a non-existent account) e.g start sam
+	
+	Output on client side:
+			ERROR: Account not found: sam
+			COMMANDS:
+				open
+				start
+				credit
+				debit
+				balance
+				finish
+				exit
+
+5. 	Input: (try to debit/credit/find balancet when not in session) 	a. e.g debit 10
+										b. e.g credit 1.22
+										c. e.g balance
+	
+	Output on client side for all cases:
+			ERROR: No session exists.
+			COMMANDS:
+				open
+				start
+				credit
+				debit
+				balance
+				finish
+				exit
+
+6.	Input: (open an account) e.g open first
+
+	Output on client side:
+			- - -Account has been created!: first - - -
+			COMMANDS:
+				open
+				start
+				credit
+				debit
+				balance
+				finish
+				exit
+
+7.	Input: (start the account) 	e.g start first
+
+	Output on client side:
+			- - -Your session has begun for account: first - - -
+			COMMANDS:
+				open
+				start
+				credit
+				debit
+				balance
+				finish
+				exit
+
+8. 	Input: (debit an amount greater than balance) 	e.g debit 10.2 (when balance is 0)
+
+	Output on client side:
+			ERROR: You cannot debit more than your balance.
+			COMMANDS:
+				open
+				start
+				credit
+				debit
+				balance
+				finish
+				exit
+
+9.	Input: (credit for the account) e.g credit 777.77
+	
+	Output on client side: 	
+			- - -Your account has been credited.- - -
+			COMMANDS:
+				open
+				start
+				credit
+				debit
+				balance
+				finish
+				exit
+
+	
+
+	Output on server side: (some time later, note approximation error! we wouldn’t want this as a real bank haha )
+			BANK INFORMATION:
+			Account name: first, Balance: 777.776978, In Service: YES 
+
+10. 	Input: (find balance of account) e.g balance
+
+	Output on client side:
+			- - -Your balance is: 777.776978.- - -
+			COMMANDS:
+				open
+				start
+				credit
+				debit
+				balance
+				finish
+				exit	
+						
+			
+11. 	Input: (finish the session) e.g finish
+		
+
+	Output on client side: 	
+			- - -You have finised your account session: first- - -
+			COMMANDS:
+				open
+				start
+				credit
+				debit
+				balance
+				finish
+				exit	
+
+	Output on server side:
+			BANK INFORMATION:
+			Account name: first, Balance: 777.776978, In Service: NO
+
+12. 	Input: (exit the bank) e.g exit (can be called in or out session is perfectly fine)
+			
+	Output on client side:
+			- - - EXITED - - -
+			- - -Thank you. Please come again! - - -.
+			- - -      Thank you for you patronage      - - -
+			- - - The Bank Server has closed connection - - -
+			- - -   You can no longer send/receive.     - - -
+			(the buffer on the client side is still reading its last input for the next command, so type anything in and it will formally close producing the message)
+			- - - Sorry, your session has expired. - - -
+
+	Output on the server side:
+			Server has closed a client connection
+
+
+			
+
+	
+
+
+
+
+
+
+
